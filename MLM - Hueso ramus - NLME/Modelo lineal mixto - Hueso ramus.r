@@ -19,13 +19,20 @@ qq_plotting =  function(model){
   shapiro.test(residuals(model))
 }
 
-# 3 - Análisis del caso
-#     El dataframe Hueso.csv contiene información sobre la longitud del hueso
-#     ramus para 20 niños a lo largo de un período de 2 años y medio. Comenzamos por tomar como
-#     factor los individuos
+"""
+3 - Análisis del caso
+    El dataframe Hueso.csv contiene información sobre la longitud del hueso
+    ramus para 20 niños a lo largo de un período de 2 años y medio. Comenzamos por tomar como
+    factor los individuos
+"""
 Hueso$fIndividuo <- factor(Hueso$individuo)
-modelo <- lme(HuesoRamus ~ edad, random = ~1 | fIndividuo, data = Hueso)
+modelo <- lme(HuesoRamus ~ edad, random = ~edad | fIndividuo, data = Hueso) # Pendiente aleatoria
+modelo2 <- lme(HuesoRamus ~ edad, random = ~1 | fIndividuo, data = Hueso) # Pendiente fija
 summary(modelo)
+summary(modelo2)
+
+# ¿Cuál modelo es mejor? Para eso se utiliza el Akaike's Information Criterio
+AIC(modelo, modelo2) # La pendiente aleatoria mejora el ajuste
 
 # Ploteamos el modelo ajustado:
 F0 <- fitted(modelo, level = 0)
@@ -51,13 +58,15 @@ for (i in 1:20){
 
 x = text(Hueso$edad, Hueso$HuesoRamus, Hueso$fIndividuo, cex=0.7)
 
+"""
 # 4 - Establecimiento del modelo
 #     Se usarán dos métodos distintos para el cálculo del cociente de verosimilitud:
 #     el criterio normal (ML) y el restringido (REML)
+"""
 Hueso$logHuesoRamus <- log(Hueso$HuesoRamus)
 Hueso$fEdad <- factor(Hueso$edad)
-modelo.ml <- lme(HuesoRamus ~ edad, data = Hueso, random = ~1| fIndividuo, method = "ML")
-modelo.reml <-lme(HuesoRamus ~ edad, data = Hueso, random = ~1 | fIndividuo, method = "REML")
+modelo.ml <- lme(HuesoRamus ~ edad, data = Hueso, random = ~edad| fIndividuo, method = "ML")
+modelo.reml <-lme(HuesoRamus ~ edad, data = Hueso, random = ~edad | fIndividuo, method = "REML")
 
 # Uso del Akaike Information Criterion para determinar cuál es el mejor modelo
 AIC(modelo.ml, modelo.reml)
