@@ -9,15 +9,17 @@ qq_plotting =  function(model){
   shapiro.test(residuals(model))
 }
 
-# 3 - Análisis del caso
-#     Wolff et al. (2020) estudiaron la forma y adhesión de las telarañas
-#     en función del microambiente donde se encuentran las especies. En base a eso
-#     desarrollaron modelos lineales mixtos para mostrar la relación entre distintas
-#     variables ambientales. Este script utiliza los datos experimentales de los
-#     autores para desarrollar el mismo modelo de forma independiente.
+"""
+3 - Análisis del caso
+    Wolff et al. (2020) estudiaron la forma y adhesión de las telarañas
+    en función del microambiente donde se encuentran las especies. En base a eso
+    desarrollaron modelos lineales mixtos para mostrar la relación entre distintas
+    variables ambientales. Este script utiliza los datos experimentales de los
+    autores para desarrollar el mismo modelo de forma independiente.
 
-# Nota: los dataframes 114_2020_1687_MOESM1_ESM.csv y 114_2020_1687_MOESM2_ESM.csv
-# se han importado con los nombres M1 y M2 respectivamente, por una cuestión de simplicidad
+Nota: los dataframes 114_2020_1687_MOESM1_ESM.csv y 114_2020_1687_MOESM2_ESM.csv
+se han importado con los nombres M1 y M2 respectivamente, por una cuestión de simplicidad
+"""
 
 # Elaboración del modelo:
 modelo1.araña <- lmer(force ~ spec + subs + (ind|spec), M1)
